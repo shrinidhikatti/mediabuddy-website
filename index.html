@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Media Buddy — Helping Your Business Grow in the Digital World</title>
+  <meta name="description" content="AI-driven performance marketing agency based in Belagavi, Karnataka. Meta Ads, Social Media, Branding, Video Production, Influencer & Web."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body class="mb-page">
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+/* ── Scroll reveal ── */
+function useReveal() {
+  useEffect(() => {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+}
+
+/* ── Icons ── */
+const Icon = ({ children, size=22, ...r }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...r}>
+    {children}
+  </svg>
+);
+const IconArrowRight = p => <Icon {...p}><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></Icon>;
+const IconChart      = p => <Icon {...p}><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></Icon>;
+const IconStarSolid  = ({size=17}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 7 7 .5-5.5 4.5L18 22l-6-4-6 4 1.5-8L2 9.5 9 9z"/></svg>;
+const IconGlobe      = p => <Icon {...p}><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></Icon>;
+const IconPhone      = p => <Icon {...p}><path d="M22 16.92V21a1 1 0 0 1-1.1 1A19 19 0 0 1 2 4.1 1 1 0 0 1 3 3h4.09a1 1 0 0 1 1 .75l1 4a1 1 0 0 1-.27 1L7 10.5a16 16 0 0 0 6.5 6.5l1.75-1.75a1 1 0 0 1 1-.27l4 1a1 1 0 0 1 .75 1Z"/></Icon>;
+const IconMail       = p => <Icon {...p}><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></Icon>;
+const IconPin        = p => <Icon {...p}><circle cx="12" cy="10" r="3"/><path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/></Icon>;
+const IconCamera     = p => <Icon {...p}><path d="M3 7h3l2-3h8l2 3h3v13H3z"/><circle cx="12" cy="13" r="4"/></Icon>;
+const IconPalette    = p => <Icon {...p}><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2a10 10 0 1 0 0 20 2 2 0 0 0 0-4 2 2 0 0 1 0-4h2.5a5.5 5.5 0 0 0 0-11C13.6 2.4 12.8 2 12 2Z"/></Icon>;
+const IconMegaphone  = p => <Icon {...p}><path d="M3 11v2a4 4 0 0 0 4 4h1l3 4v-4l8 2V5l-8 2H7a4 4 0 0 0-4 4Z"/></Icon>;
+const IconUsers      = p => <Icon {...p}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></Icon>;
+const IconClock      = p => <Icon {...p}><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></Icon>;
+const IconInstagram  = p => <Icon {...p}><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></Icon>;
+const IconFacebook   = p => <Icon {...p}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></Icon>;
+const IconLinkedIn   = p => <Icon {...p}><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 10v8M8 7v.01M12 18v-5a3 3 0 0 1 6 0v5"/></Icon>;
+const IconYouTube    = p => <Icon {...p}><rect x="2" y="6" width="20" height="12" rx="3"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></Icon>;
+const IconWhatsApp   = p => <Icon {...p}><path d="M3 21l1.5-5A8 8 0 1 1 8 19.5z"/><path d="M9 9c.5 2 2 3.5 4 4 .8.2 1.6-.5 2-1.2"/></Icon>;
+
+/* ── Layout helpers ── */
+const Container = ({ children, className="" }) => (
+  <div className={`mb-container ${className}`}>{children}</div>
+);
+const Section = ({ children, alt, dark, tint, id, className="" }) => (
+  <section id={id}
+    className={`mb-section${alt?' mb-section--alt':''}${dark?' mb-section--dark':''}${tint?' mb-section--tint':''} ${className}`}>
+    <Container>{children}</Container>
+  </section>
+);
+const Eyebrow = ({ children }) => <span className="mb-eyebrow">{children}</span>;
+const Button = ({ variant="primary", size, children, href="#", icon }) => (
+  <a className={`mb-btn mb-btn--${variant}${size==='lg'?' mb-btn--lg':''}`} href={href}>
+    <span>{children}</span>{icon}
+  </a>
+);
+const SectionHead = ({ eyebrow, title, lead }) => (
+  <div className="mb-sec-head reveal">
+    {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
+    <h2>{title}</h2>
+    {lead && <p>{lead}</p>}
+  </div>
+);
+
+/* ── Navbar ── */
+const NAV_LINKS = [
+  ['#about','About'],['#services','Services'],['#process','Process'],
+  ['#clients','Clients'],['#contact','Contact'],
+];
+const Navbar = () => {
+  const [open, setOpen]       = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', fn, { passive:true });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+  return (
+    <>
+      <header className={`mb-nav${scrolled?' scrolled':''}`}>
+        <Container>
+          <div className="mb-nav__inner">
+            <a href="#" className="mb-nav__logo">
+              <span className="mb-nav__mark">M</span>Media<b>Buddy</b>
+            </a>
+            <nav className="mb-nav__links">
+              {NAV_LINKS.map(([h,l]) => <a key={h} href={h}>{l}</a>)}
+            </nav>
+            <div className="mb-nav__right">
+              <Button variant="primary" icon={<IconArrowRight size={15}/>}>Get Started</Button>
+              <button className={`mb-hamburger${open?' open':''}`} onClick={()=>setOpen(o=>!o)} aria-label="Menu">
+                <span/><span/><span/>
+              </button>
+            </div>
+          </div>
+        </Container>
+      </header>
+      <nav className={`mb-mobile-menu${open?' open':''}`}>
+        {NAV_LINKS.map(([h,l]) => <a key={h} href={h} onClick={()=>setOpen(false)}>{l}</a>)}
+        <Button variant="primary" size="lg" icon={<IconArrowRight size={16}/>}>Get Started</Button>
+      </nav>
+    </>
+  );
+};
+
+/* ── Hero ── */
+const Hero = () => (
+  <section className="mb-hero" id="home">
+    <Container>
+      <div className="mb-hero__grid">
+        <div>
+          <div className="mb-hero__eyebrow"><Eyebrow>Performance Marketing · Belagavi, Karnataka</Eyebrow></div>
+          <h1 className="mb-hero__headline">Helping Your Business <mark>Grow</mark> in the Digital World.</h1>
+          <p className="lead mb-hero__lead">Sharp creative, full-funnel execution, and transparent reporting — built by a Belagavi team that ships campaigns in days, not quarters.</p>
+          <div className="mb-hero__ctas">
+            <Button variant="primary" size="lg" icon={<IconArrowRight size={16}/>}>Get Started</Button>
+            <Button variant="ghost" size="lg" icon={<IconPhone size={16}/>}>Call Us Now</Button>
+          </div>
+          <div className="mb-hero__trust">
+            <div className="mb-hero__trust-item"><b>5+</b>Years</div>
+            <div className="mb-hero__trust-item"><b>120+</b>Brands</div>
+            <div className="mb-hero__trust-item"><b>5.0★</b>Google</div>
+            <div className="mb-hero__trust-item"><b>2</b>Branches</div>
+          </div>
+        </div>
+        <div className="mb-hero__visual-wrap">
+          <div className="mb-hero__visual">
+            <div className="mb-hero__visual-inner">MB</div>
+            <div className="mb-hero__chip mb-hero__chip--tl"><IconChart size={18}/> +312% ROAS</div>
+            <div className="mb-hero__chip mb-hero__chip--br"><IconStarSolid size={16}/> 5.0 Google Reviews</div>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </section>
+);
+
+/* ── About ── */
+const About = () => (
+  <Section alt id="about">
+    <SectionHead eyebrow="About Us" title="A creative, results-driven team in Belagavi."
+      lead="PIXELBUDDY CREATIVE LLP — better known as Media Buddy — was founded by two operators who built the alternative to bad agencies. 5+ years helping Karnataka's best brands grow."/>
+    <div className="mb-about__grid">
+      {[
+        {init:"SK",name:"Shrilesh M. Kurane",role:"Founder",bio:"Strategy, performance marketing, and the operating playbook every campaign runs on."},
+        {init:"VA",name:"Vinayak R. Amble",role:"Co-Founder",bio:"Creative direction, brand systems, and the visual craft behind every reel and ad."},
+      ].map((f,i) => (
+        <div key={f.name} className={`mb-founder reveal reveal-delay-${i+1}`}>
+          <div className="mb-founder__avatar">{f.init}</div>
+          <div><span className="role">{f.role}</span><h4>{f.name}</h4><p>{f.bio}</p></div>
+        </div>
+      ))}
+    </div>
+    <div className="mb-about__stats reveal reveal-delay-3">
+      {[["5+","Years"],["120+","Brands"],["8","Govt. Clients"],["2","Branches"]].map(([n,l])=>(
+        <div key={l} className="mb-about__stat"><b>{n}</b><span>{l}</span></div>
+      ))}
+    </div>
+  </Section>
+);
+
+/* ── Services ── */
+const SERVICES = [
+  {icon:<IconChart/>,     title:"Digital Marketing",    body:"Meta Ads, Google Ads, YouTube Ads, SEO — all tracked to revenue, not vanity metrics.",link:"Performance →"},
+  {icon:<IconMegaphone/>, title:"Social Media",         body:"Calendars, content, and community management that keep your brand top-of-feed every week.",link:"Social →"},
+  {icon:<IconPalette/>,   title:"Branding & Design",    body:"Logos, poster, banner, and package design — identity systems built to last.",link:"Brand →"},
+  {icon:<IconCamera/>,    title:"Video Production",     body:"Reels, ad films, and brand videos — shot and edited end-to-end by our in-house team.",link:"Video →"},
+  {icon:<IconUsers/>,     title:"Influencer Marketing", body:"Curated creator partnerships across South India — vetted, briefed, and fully reported on.",link:"Influencer →"},
+  {icon:<IconGlobe/>,     title:"Digital Solutions",    body:"Website design, landing pages, Google Business setup — live in weeks, not quarters.",link:"Build →"},
+];
+const Services = () => (
+  <Section id="services">
+    <SectionHead eyebrow="What We Do" title="Six services. One partner."
+      lead="We run the full stack of digital marketing under one roof — so your strategy, creative, and media always work together."/>
+    <div className="mb-services__grid">
+      {SERVICES.map((s,i)=>(
+        <div key={s.title} className={`mb-service reveal reveal-delay-${(i%3)+1}`}>
+          <div className="mb-service__icon">{s.icon}</div>
+          <h4>{s.title}</h4><p>{s.body}</p>
+          <span className="mb-service__link">{s.link} <IconArrowRight size={13}/></span>
+        </div>
+      ))}
+    </div>
+  </Section>
+);
+
+/* ── Why Choose Us ── */
+const FEATURES = [
+  {n:"01",t:"Performance-led",d:"Every campaign tracks to revenue. Weekly dashboards, plain English — no black-box agency math."},
+  {n:"02",t:"In-house creative",d:"Strategists, designers, and editors under one roof in Belagavi. No outsourcing, no quality loss."},
+  {n:"03",t:"Customised solutions",d:"No copy-paste packages. Every brand gets a strategy built around their specific goals and market."},
+  {n:"04",t:"AI-augmented",d:"Faster iteration, lower CPAs, sharper creative — AI tools applied where they actually move the needle."},
+];
+const WhyChooseUs = () => (
+  <Section alt id="why">
+    <SectionHead eyebrow="Why Choose Us" title="Built for brands that need to move fast."
+      lead="Four things that set us apart from every other agency in the region."/>
+    <div className="mb-feat__grid">
+      {FEATURES.map((f,i)=>(
+        <div key={f.n} className={`mb-feat reveal reveal-delay-${i+1}`}>
+          <div className="mb-feat__num">{f.n}</div><h5>{f.t}</h5><p>{f.d}</p>
+        </div>
+      ))}
+    </div>
+  </Section>
+);
+
+/* ── Process ── */
+const STEPS = [
+  {n:"STEP 01",t:"Discover",  d:"Audit, audience research, and goal-setting session."},
+  {n:"STEP 02",t:"Strategise",d:"Channel mix, KPIs, and a quarterly roadmap."},
+  {n:"STEP 03",t:"Create",    d:"Creative system, copy, video, and all campaign assets."},
+  {n:"STEP 04",t:"Launch",    d:"Campaigns go live across paid + organic channels."},
+  {n:"STEP 05",t:"Optimise",  d:"Daily tuning, A/B tests, and weekly strategy reviews."},
+  {n:"STEP 06",t:"Report",    d:"Plain-English dashboards and next-quarter growth plan."},
+];
+const Process = () => (
+  <Section id="process">
+    <SectionHead eyebrow="Our Process" title="Six steps from kickoff to compounding growth."/>
+    <div className="mb-proc__rail">
+      {STEPS.map((s,i)=>(
+        <div key={s.n} className={`mb-proc__step reveal reveal-delay-${(i%3)+1}`}>
+          <span className="mb-proc__num">{s.n}</span><h5>{s.t}</h5><p>{s.d}</p>
+        </div>
+      ))}
+    </div>
+  </Section>
+);
+
+/* ── Clients ── */
+const CLIENTS = [
+  "Belagavi City Police","Gadag District Police","Hubballi-Dharwad Police",
+  "Expert Science College","Dr. Ravi Patil Health","Ganga Diagnostic",
+  "FIXIDU","Vijaya Ortho & Trauma",
+];
+const Clients = () => (
+  <Section alt id="clients">
+    <SectionHead eyebrow="Our Clients" title="Trusted by government & institutional brands."
+      lead="From law enforcement to healthcare — organisations that can't afford bad marketing trust us."/>
+    <div className="mb-clients__grid reveal">
+      {CLIENTS.map(c=><div key={c} className="mb-client">{c}</div>)}
+    </div>
+  </Section>
+);
+
+/* ── Testimonials ── */
+const REVIEWS = [
+  {n:"Aakash Patil",   r:"Founder, Local Brand",   init:"AP",
+   q:"Media Buddy rebuilt our entire ad funnel in three weeks. ROAS went from 1.8 to 4.6 by month two — we've never had reporting this clean."},
+  {n:"Priya Deshpande",r:"Marketing Lead, Retail",  init:"PD",
+   q:"Their creative team thinks like marketers, not just designers. The reels they produce for us consistently outperform anything we ran before."},
+  {n:"Rohit Shinde",   r:"CEO, Regional Brand",     init:"RS",
+   q:"Two branches in Belagavi, but they show up like a team five times the size. Strategy calls every Monday, dashboards every Friday."},
+];
+const Stars = () => (
+  <div className="mb-testc__stars">{[0,1,2,3,4].map(i=><IconStarSolid key={i}/>)}</div>
+);
+const Testimonials = () => (
+  <Section id="reviews">
+    <SectionHead eyebrow="Testimonials" title="What our clients say."
+      lead="Real feedback from founders and marketing leads we work with."/>
+    <div className="mb-test__grid">
+      {REVIEWS.map((r,i)=>(
+        <div key={r.n} className={`mb-testc reveal reveal-delay-${i+1}`}>
+          <Stars/>
+          <p>"{r.q}"</p>
+          <div className="mb-testc__by">
+            <div className="mb-testc__avatar">{r.init}</div>
+            <div><b>{r.n}</b><span>{r.r}</span></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </Section>
+);
+
+/* ── Contact ── */
+const Contact = () => (
+  <Section alt id="contact">
+    <SectionHead eyebrow="Visit or Call" title="Two branches. One team. Ready when you are."
+      lead="Drop in for a coffee or send a WhatsApp — we reply same day."/>
+    <div className="mb-contact__grid">
+      <div className="mb-branch reveal reveal-delay-1">
+        <h4><IconPin size={20}/> Shahunagar Branch</h4>
+        <div className="mb-branch__row"><IconPin size={17}/><div>Shahunagar 2nd Cross,<br/><strong>Belagavi, Karnataka</strong></div></div>
+        <div className="mb-branch__row"><IconPhone size={17}/><div>+91 78992 33184</div></div>
+        <div className="mb-branch__row"><IconClock size={17}/><div>Mon – Sat · 10:00 – 19:00</div></div>
+      </div>
+      <div className="mb-branch reveal reveal-delay-2">
+        <h4><IconPin size={20}/> Airport Road Branch</h4>
+        <div className="mb-branch__row"><IconPin size={17}/><div>Airport Road, Shindolli,<br/><strong>Belagavi, Karnataka</strong></div></div>
+        <div className="mb-branch__row"><IconPhone size={17}/><div>+91 89511 55114</div></div>
+        <div className="mb-branch__row"><IconMail size={17}/><div>hello@mediabuddy.in</div></div>
+      </div>
+    </div>
+    <div className="mb-contact__ctas reveal reveal-delay-3">
+      <Button variant="primary" size="lg" href="tel:+917899233184" icon={<IconPhone size={16}/>}>Call Now</Button>
+      <Button variant="ghost"   size="lg" href="https://wa.me/917899233184" icon={<IconWhatsApp size={16}/>}>WhatsApp Us</Button>
+      <Button variant="dark"    size="lg" href="https://www.mediabuddy.in" icon={<IconGlobe size={16}/>}>Visit Website</Button>
+    </div>
+  </Section>
+);
+
+/* ── Footer ── */
+const Footer = () => (
+  <footer className="mb-footer">
+    <Container>
+      <div className="mb-footer__grid">
+        <div className="mb-footer__about">
+          <div className="mb-footer__logo"><span className="mb-nav__mark">M</span>Media<b>Buddy</b></div>
+          <p>PIXELBUDDY CREATIVE LLP. Performance marketing, sharp creative, and full-service digital growth — built in Belagavi for brands across India.</p>
+          <div className="mb-footer__socials">
+            <a href="https://www.facebook.com"    aria-label="Facebook"><IconFacebook   size={17}/></a>
+            <a href="https://www.instagram.com"   aria-label="Instagram"><IconInstagram  size={17}/></a>
+            <a href="https://www.youtube.com"     aria-label="YouTube"><IconYouTube    size={17}/></a>
+            <a href="https://www.linkedin.com"    aria-label="LinkedIn"><IconLinkedIn   size={17}/></a>
+            <a href="https://wa.me/917899233184"  aria-label="WhatsApp"><IconWhatsApp   size={17}/></a>
+          </div>
+        </div>
+        <div>
+          <h6>Services</h6>
+          <ul>
+            <li><a href="#services">Digital Marketing</a></li>
+            <li><a href="#services">Social Media</a></li>
+            <li><a href="#services">Branding & Design</a></li>
+            <li><a href="#services">Video Production</a></li>
+            <li><a href="#services">Influencer</a></li>
+            <li><a href="#services">Digital Solutions</a></li>
+          </ul>
+        </div>
+        <div>
+          <h6>Company</h6>
+          <ul>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#clients">Our Clients</a></li>
+            <li><a href="#process">Our Process</a></li>
+            <li><a href="#reviews">Testimonials</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h6>Reach Us</h6>
+          <ul>
+            <li><a href="tel:+917899233184">+91 78992 33184</a></li>
+            <li><a href="tel:+918951155114">+91 89511 55114</a></li>
+            <li><a href="mailto:hello@mediabuddy.in">hello@mediabuddy.in</a></li>
+            <li><a href="https://www.mediabuddy.in">www.mediabuddy.in</a></li>
+          </ul>
+        </div>
+      </div>
+      <div className="mb-footer__bottom">
+        <span>© 2026 PIXELBUDDY CREATIVE LLP. All rights reserved.</span>
+        <span>Made with care in Belagavi, Karnataka.</span>
+      </div>
+    </Container>
+  </footer>
+);
+
+/* ── App ── */
+const App = () => {
+  useReveal();
+  return (
+    <>
+      <Navbar/>
+      <Hero/>
+      <About/>
+      <Services/>
+      <WhyChooseUs/>
+      <Process/>
+      <Clients/>
+      <Testimonials/>
+      <Contact/>
+      <Footer/>
+    </>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
